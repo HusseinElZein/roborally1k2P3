@@ -156,7 +156,6 @@ public class GameController {
 
                     if(command.isInteractive()){
                         board.setPhase(Phase.PLAYER_INTERACTION);
-                        return;
                     }else {
                         executeCommand(currentPlayer, command);
                     }
@@ -261,9 +260,10 @@ public class GameController {
      * A method called when no corresponding controller operation is implemented yet. This
      * should eventually be removed.
      */
-    public void notImplemented() {
-        // XXX just for now to indicate that the actual method is not yet implemented
-        assert false;
+    public void executeCommandOptionAndContinue(Command chosenCommand) {
+
+        executeCommand(board.getCurrentPlayer(), chosenCommand);
+        board.setPhase(Phase.ACTIVATION);
     }
 
 }
