@@ -156,6 +156,7 @@ public class GameController {
 
                     if(command.isInteractive()){
                         board.setPhase(Phase.PLAYER_INTERACTION);
+                        return;
                     }else {
                         executeCommand(currentPlayer, command);
                     }
