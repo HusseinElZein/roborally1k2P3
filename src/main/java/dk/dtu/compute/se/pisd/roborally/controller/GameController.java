@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 public class GameController {
 
     final public Board board;
+    private Player playerInteracter;
 
     public GameController(@NotNull Board board) {
         this.board = board;
@@ -61,7 +62,6 @@ public class GameController {
                 board.setCurrentPlayer(board.getPlayer(playerNumber));
             }
         }
-
     }
 
     // XXX: V2
@@ -156,6 +156,7 @@ public class GameController {
 
                     if(command.isInteractive()){
                         board.setPhase(Phase.PLAYER_INTERACTION);
+                        playerInteracter = currentPlayer;
                     }else {
                         executeCommand(currentPlayer, command);
                     }
@@ -262,7 +263,7 @@ public class GameController {
      */
     public void executeCommandOptionAndContinue(Command chosenCommand) {
 
-        executeCommand(board.getCurrentPlayer(), chosenCommand);
+        executeCommand(playerInteracter, chosenCommand);
         board.setPhase(Phase.ACTIVATION);
     }
 
