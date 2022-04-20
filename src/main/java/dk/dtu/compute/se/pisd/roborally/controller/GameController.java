@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+
 /**
  * ...
  *
@@ -156,7 +158,6 @@ public class GameController {
 
                     if(command.isInteractive()){
                         board.setPhase(Phase.PLAYER_INTERACTION);
-                        playerInteracter = currentPlayer;
                     }else {
                         executeCommand(currentPlayer, command);
                     }
@@ -216,11 +217,57 @@ public class GameController {
         if (player != null && player.board == board && space != null) {
             Heading heading = player.getHeading();
             Space target = board.getNeighbour(space, heading);
+
             if (target != null) {
+
                 // XXX note that this removes an other player from the space, when there
                 //     is another player on the target. Eventually, this needs to be
                 //     implemented in a way so that other players are pushed away!
-                target.setPlayer(player);
+
+                Player targetedPlayer = null;
+
+                Player cp1 = player;
+
+                Space otherSpace = board.getNeighbour(space, heading);
+
+                if(otherSpace.getPlayer() != null){
+                    otherSpace = board.getNeighbour(otherSpace.getPlayer().getSpace(), heading);
+                }
+
+                if(target.getPlayer() != null && otherSpace.getPlayer() == null){
+                    targetedPlayer = target.getPlayer();
+
+                    Player cp = targetedPlayer;
+
+                    space = cp.getSpace();
+
+                    Space targetNew = board.getNeighbour(space, heading);
+                    targetNew.setPlayer(targetedPlayer);
+
+                    if(target.getWall() == null) {
+                        target.setPlayer(player);
+
+                        if(target.getTransportField() != null){
+                            if(board.getTransportField(0) == target){
+                                board.getTransportField(1).setPlayer(player);
+                            }else{
+                                board.getTransportField(0).setPlayer(player);
+                            }
+                        }
+
+                    }
+                }else if (target.getPlayer() == null && target.getWall() == null){
+                    target.setPlayer(player);
+
+                    if(target.getTransportField() != null){
+                        if(board.getTransportField(0) == target){
+                            board.getTransportField(1).setPlayer(player);
+                        }else{
+                            board.getTransportField(0).setPlayer(player);
+                        }
+                    }
+
+                }
             }
         }
     }

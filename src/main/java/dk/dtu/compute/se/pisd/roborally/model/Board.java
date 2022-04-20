@@ -55,7 +55,11 @@ public class Board extends Subject {
 
     private int step = 0;
 
+    private int i = 0;
+
     private boolean stepMode;
+
+    private TransportField[] transportField = new TransportField[2];
 
     public Board(int width, int height, @NotNull String boardName) {
         this.boardName = boardName;
@@ -71,8 +75,37 @@ public class Board extends Subject {
         this.stepMode = false;
     }
 
+    public void insertWall(int x, int y){
+        Wall wall = new Wall();
+
+        Space space = new Space(this, x, y, wall);
+
+        spaces[x][y] = space;
+    }
+
+    public void insertTransportField(int x, int y){
+
+        transportField[i] = new TransportField(x, y);
+        Space space = new Space(this, x, y, transportField[i]);
+        i++;
+        spaces[x][y] = space;
+    }
+
+    public Space getTransportField(int zeroOrOne) {
+
+        int x = transportField[zeroOrOne].getX();
+
+        int y = transportField[zeroOrOne].getY();
+
+        return spaces[x][y];
+    }
+
     public Board(int width, int height) {
         this(width, height, "defaultboard");
+    }
+
+    public Space[][] getSpaces() {
+        return spaces;
     }
 
     public Integer getGameId() {
